@@ -1,31 +1,9 @@
-
-FROM --platform=$BUILDPLATFORM node:18.14-bullseye-slim as builder
-
-RUN mkdir /project
-WORKDIR /project
-
-COPY package.json package-lock.json ./
-RUN npm ci
+FROM node:18-alpine AS build
+WORKDIR /app
 RUN npm install -g @angular/cli
-RUN ng new app
-COPY . .
-CMD ["ng", "serve", "--host", "0.0.0.0"]
-
-FROM builder as dev-envs
-
-RUN <<EOF
-
-FROM ubuntu:latest
-RUN apt-get -y update
-RUN apt-get -y install -y --no-install-recommends git
-EOF
-
-RUN <<EOF
-useradd -s /bin/bash -m vscode
-groupadd docker
-usermod -aG docker vscode
-EOF
-# install Docker tools (cli, buildx, compose)
-COPY --from=gloursdocker/docker / /
-
-CMD ["ng", "serve", "--host", "0.0.0.0"]
+FROM build AS development
+RUN apk update \
+    && apk add git
+FROM alpine:3.12
+EXPOSE 4200
+CMD ["ng", "serve", "--host","0.0.0.0"]
