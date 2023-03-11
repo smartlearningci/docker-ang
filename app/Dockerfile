@@ -4,4 +4,5 @@ RUN npm install -g @angular/cli
 RUN ng new app
 EXPOSE 4200 49153
 FROM builder as development
+CMD ["CD", "app"]
 CMD ["ng","serve","--host","0.0.0.0"]
