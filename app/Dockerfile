@@ -1,6 +1,7 @@
 FROM node:18-alpine AS build
 WORKDIR /app
 RUN npm install -g @angular/cli
+RUN ng new app
 FROM build AS development
 RUN apk update \
     && apk add git
