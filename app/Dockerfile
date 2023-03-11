@@ -7,4 +7,3 @@ EXPOSE 4200 49153
 FROM build AS development
 RUN apk update \
     && apk add git
-CMD ["ng","serve"]
