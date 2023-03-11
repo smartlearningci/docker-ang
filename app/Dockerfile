@@ -1,10 +1,6 @@
-FROM node:18-alpine AS build
-WORKDIR /app
+FROM node:18-alpine
 RUN npm install -g @angular/cli
-RUN ng new app
-FROM build AS development
-RUN apk update \
-    && apk add git
-FROM alpine:3.12
-EXPOSE 4200
-CMD ["ng", "serve", "--host","0.0.0.0"]
+USER node
+WORKDIR /app
+EXPOSE 4200 49153
+CMD npm start
